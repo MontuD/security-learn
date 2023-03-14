@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    <link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAABP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAQAAAAABEAABEAAAABEAAAARAAABEAEAAAEQABEAARAAABEBEAAAEQAAARARAAABEAARAAEQAAAQARAAABEAAAARAAAAARAAARAAAAAAEAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rel="icon" type="image/x-icon" />
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap');
+        </style>
+    
+    <style>
+        body{
+            padding:1em;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .add-notes, .notes-display {
+            border-bottom: 2px solid rgb(163, 21, 21);
+        }
+
+
+        .flex .add-notes, .flex .notes-display {
+        padding-left: 2em;
+        padding-right: 2em;
+        padding-top: 1em;
+        padding-bottom: 1em;
+        }
+
+        .hide{
+            display: none;
+        }
+
+        .show{
+            display: block;
+        }
+
+        .worknotes-holder {
+            display: flex;
+            flex-wrap: wrap;
+
+
+        }
+        .worknotes-holder .wn-cards {
+            display: grid;
+            margin: 1em;
+           
+        }
+
+        .worknotes-holder .wn-cards textarea {
+             margin-bottom: 1em;  
+             overflow-y: scroll;     
+             font-family: Montserrat, sans-serif;
+            width: 305px;
+            height: 136px;
+            font-weight: bold; 
+        }
+
+        .flex .add-notes label {
+            font-weight: bold;
+        }
+
+        textarea{
+
+            margin-bottom: 1em;       
+            font-family: Montserrat, sans-serif;
+            width: 305px;
+            height: 136px;
+            font-weight: bold;
+
+        }
+
+
+    </style>
+</head>
+<title>Create and retrive Work Notes</title>
+<body>
+  
+        <h2>Create and retrive Work Notes</h2> 
+
+        
+        <div class="flex">
+        
+
+            <div class="notes-display">
+                <h4>Select Option to See Avalible Work Notes</h4>
+                <div class="worknotes-options">
+                    <select name="worknotes" id="worknotes"></select>
+                </div>
+
+                <div class="worknotes-holder" id="worknotes-holder-show">
+
+                </div>
+
+            </div>
+
+
+            <div class="add-notes">
+                <form action="">
+                    <input type="checkbox"  id="addnotesSwitch" name="notes" hidden>
+                    <label for="addnotesSwitch">Add Notes</label>
+                </form>
+                <div class="notes-form hide">
+                    <form action="" method="post">
+                        <select name="worknotes" id="optionselect"></select><br><br>
+                        <textarea name="" id="notesText" cols="30" rows="5"></textarea><br><br> 
+                        <button  type="submit" id="addnote">Add Notes</button>
+                    </form>
+                </div>
+            </div>
+
+
+
+            <div class="add-notes">
+                <form action="">
+                    <input type="checkbox"  id="generatenotes" name="notes" hidden>
+                    <label for="generatenotes">Generate Notes</label>
+                </form>
+               
+                <div class="textarea notes-gen-form hide">
+                    <div>
+                     <textarea value="" id="notes" rows="10" cols="20">
+                     </textarea>
+                    
+                     <div class="buttons">
+                       <button id="copy" onclick="click('copy')">Copy Notes</button>
+                       <button id="opening">Opening Notes</button>
+                       <button id="resolvedclosing">Resolved Closing Notes</button>
+                       <button id="escalateclosing">Escalate Closing Notes</button>
+                       <button id="clearedCache">Cleared Cache</button>
+                       <button id="remote">Remote verbiage</button>
+			<button id="newline">New line</button>
+                       <button id="reset">Reset</button>
+                     </div>
+                    </div>
+                   <div>
+                   
+                   
+                   </div>
+
+
+
+
+
+            </div>
+
+
+        </div>
+
+
+
+
+
+    <script>
+
+        
+        (function () {
+
+            let options = ["active_directory","bitlocker","eyrc","intune","laptop","msoffice","outlook","pingid","teams","wifi",]
+
+            let selectShowWn = document.getElementById("worknotes");
+            let selectCreateWN = document.getElementById("optionselect");
+
+            function populateSelect(selector){
+                options.forEach(e=>{
+                let option = document.createElement("option");
+                option.text = e;
+                option.setAttribute("id",e);
+                option.setAttribute("value",e);
+                selector.appendChild(option)
+             });
+             }
+            populateSelect(selectShowWn);
+
+            populateSelect(selectCreateWN);
+
+            document.getElementById("addnotesSwitch").addEventListener("change",(e)=> {
+                let notesForm = document.getElementsByClassName("notes-form");
+
+               if(document.getElementById("addnotesSwitch").checked){
+                    notesForm[0].classList.remove("hide");
+                    notesForm[0].classList.add("show");
+                   
+                }
+                else{
+                    notesForm[0].classList.remove("show");
+                    notesForm[0].classList.add("hide");
+                }
+                console.log(document.getElementById("addnotesSwitch").checked)   
+            })
+
+            document.getElementById("generatenotes").addEventListener("change",(e)=> {
+
+                let genNotes = document.getElementsByClassName("notes-gen-form");
+
+               if(document.getElementById("generatenotes").checked){
+                    genNotes[0].classList.remove("hide");
+                    genNotes[0].classList.add("show");
+                   
+                }
+                else{
+                    genNotes[0].classList.remove("show");
+                    genNotes[0].classList.add("hide");
+                }
+                console.log(document.getElementById("generatenotes").checked)   
+            })
+
+
+
+            selectShowWn.addEventListener("change",function(e){
+                
+                let select = document.getElementById("worknotes");
+                let option = select.options[select.selectedIndex].value;
+
+                document.getElementById("worknotes-holder-show").innerHTML = ""
+
+                console.log(option)
+                let url = urlBuilder(option);
+                fetchWorkNotesFromDatabase(url);
+
+            });
+
+            function fetchWorkNotesFromDatabase(url){
+
+            fetch(url)
+            .then(data=>data.json())
+            .then( res => { 
+                    
+                        Object.keys(res).forEach(key =>  {
+
+                            let div = document.createElement("div");
+
+                            div.setAttribute("class","wn-cards");
+
+                            let textarea = document.createElement("textarea");
+
+                            textarea.textContent = res[key.toString()];
+
+                            textarea.setAttribute("id" ,"key");
+
+                            textarea.setAttribute("rows" ,"10");
+                            textarea.setAttribute("cols" ,"30");
+                            textarea.setAttribute("class","copytextarea");
+                            let button = document.createElement("button");
+
+                            
+                            button.setAttribute("value" , "Copy WN");
+
+                            button.textContent = "Copy WN";
+                            button.setAttribute("text-id",key);
+                            button.setAttribute("class","copybtn");
+        
+                            div.append(textarea);
+
+                            div.append(button);
+
+                            document.getElementById("worknotes-holder-show").append(div);
+
+
+                        });
+
+
+                        var copyTextareaBtn = Array.prototype.slice.call(document.querySelectorAll('.copybtn'));
+            var copyTextarea = Array.prototype.slice.call(document.querySelectorAll('.copytextarea'));
+
+            
+            copyTextareaBtn.forEach(function(btn, idx){
+  
+            btn.addEventListener("click", function(e){
+                e.preventDefault();
+
+                
+            
+            // Get the textarea who's index matches the index of the button
+                copyTextarea[idx].select();
+
+                try {
+                    var msg = document.execCommand('copy') ? 'successful' : 'unsuccessful';
+                    console.log('Copying text command was ' + msg);
+                } catch (err) {
+                    console.log('Whoops, unable to copy');
+                } 
+                
+                });})  });
+
+
+            }
+
+            
+
+
+            document.getElementById("addnote").addEventListener("click", e=> {
+
+                e.preventDefault();
+                let select = document.getElementById("optionselect");
+                let option =select.options[select.selectedIndex].value;
+                let url = urlBuilder(option);
+                addWorkNotesIntoDatabaseAtSelectedCatagory(url,option);
+            })
+
+            function addWorkNotesIntoDatabaseAtSelectedCatagory(url,option){
+
+                let notes = document.getElementById("notesText").value; 
+
+                fetch(url,{method:"POST",body:JSON.stringify(notes)})
+
+            }
+
+
+
+            function urlBuilder(option){
+                const url = "https://fir-notify-f738d.firebaseio.com/categories/"
+                return url + option +".json";
+            }
+ 
+        })();
+    </script>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script>
+
+        const  textarea =  document.getElementById("notes");
+
+
+        var notes = { 
+  opening: `📝L1 Service Desk Notes: \n==============\n ★ Problem Statement:\n ★ CBN:\n===============\n  👷 Troubleshooting steps\n================\n`,  
+  remote : "✔ Took remote verbiage given\n",
+  resolvedclosing : "✔ Issue resolved \n✔ Hence closing this ticket with users confirmation\n",
+  escalateclosing : "✔ As per Kb article Escalting this ticket to concern team for futher action\n",
+  clearedCache : "✔ Cleared Cache & Cookies\n",
+  newline : "\n✔",
+};
+
+
+        $("#copy").click(function(){
+        document.getElementById("notes").select();
+            document.execCommand("copy");
+
+        });
+
+        $("#opening").click(()=>{
+            textarea.value += notes.opening;
+        });
+
+       $("#newline").click(()=>{
+            textarea.value += notes.newline;
+        });
+
+
+        $("#resolvedclosing").click(()=>{
+            textarea.value += notes.resolvedclosing;
+        });
+
+        $("#escalateclosing").click(()=>{
+            textarea.value += notes.escalateclosing;
+        });
+
+        $("#remote").click(()=>{
+            textarea.value += notes.remote;
+        });
+
+        $("#clearedCache").click(()=>{
+        textarea.value += notes.clearedCache;
+        });
+
+        $("#reset").click(()=>{
+            textarea.value = "";
+        });
+
+
+        $("textarea").keyup(function(e) {
+            while($(this).outerHeight() < this.scrollHeight + parseFloat($(this).css("borderTopWidth")) + parseFloat($(this).css("borderBottomWidth"))) {
+                $(this).height($(this).height()+1);
+            };
+        });
+
+
+
+
+
+
+
+
+</script>
+
+</body>
+</html>
